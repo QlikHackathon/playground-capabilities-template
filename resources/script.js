@@ -1,14 +1,17 @@
 // Input your config
-var config = {}
+var config = {
+  host: 'playground.qlik.com',
+  prefix: '/showcase/',
+  port: '443',
+  isSecure: true,
+  rejectUnauthorized: false,
+  appname: '0b0fc6d5-05ce-44d7-95aa-80d0680b3559'
+}
 
 var app
 var alteredState = 'SecondState'
 var selectionField = 'Recorded Class'
 var hypercube
-
-function authenticate() {
-  Playground.authenticate(config)
-}
 
 function main() {
   // @ts-ignore
@@ -41,13 +44,13 @@ function main() {
     app = qlik.openApp(config.appname, config)
     console.log('APP', app)
 
-    createBarChart() // Create a bar chart in the normal state
-    createBasicHyperCube() // Create a one dimensional hypercube
-    createMultiDimensionalHyperCube() // Create a HyperCube with multiple dimensions
-    getFieldData() // Get The Data For A Field
-    addAlternateState() // add a new state
-    createBarChartDifferentState() // Create a bar chart in a state separate from the normal state
-    createHyperCubeDifferentState() // Create a Hypercube in a state separate from the normal state
+    // createBarChart() // Create a bar chart in the normal state
+    // createBasicHyperCube() // Create a one dimensional hypercube
+    // createMultiDimensionalHyperCube() // Create a HyperCube with multiple dimensions
+    // getFieldData() // Get The Data For A Field
+    // addAlternateState() // add a new state
+    // createBarChartDifferentState() // Create a bar chart in a state separate from the normal state
+    // createHyperCubeDifferentState() // Create a Hypercube in a state separate from the normal state
   })
 }
 
@@ -116,9 +119,13 @@ function createBasicHyperCube() {
     ]
   }
 
-  hypercube = app.createCube(hyperCubeDef, function(hypercube) {
-    console.log('Basic Hypercube', hypercube.qHyperCube)
-  })
+  app
+    .createCube(hyperCubeDef, hypercube => {
+      console.log('Basic Hypercube', hypercube.qHyperCube)
+    })
+    .then(result => {
+      console.log('promise result', result)
+    })
 }
 
 function createMultiDimensionalHyperCube() {
